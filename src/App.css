@@ -6,7 +6,7 @@
   color:white;
 }
 .formWrapper{
-  background-color: blueviolet;
+  background-color: rgb(39, 38, 40);
   padding:20px;
   border-radius: 10px;
   width:400px;
@@ -15,9 +15,10 @@
 footer{
   position:fixed;
   bottom: 0;
+  /* right:10px; */
 }
 footer a{
-  color:violet
+  color:rgb(41, 173, 47)
 }
 .inputGroup{
   display:flex;
@@ -51,7 +52,7 @@ margin-top:0;
   transition: all 0.3s ease-in-out;
 }
 .joinBtn{
-  background-color: #2b824c;
+  background-color: #6f2b82;
 }
 .createInfo{
   
@@ -59,13 +60,13 @@ margin-top:0;
   margin-top:20px;
 }
 .createNewBtn{
-  color:#4aed88;
+  color:#ab41cb;
   text-decoration: none;
-  border-bottom: 1px solid #4aed88;
+  border-bottom: 1px solid #c066ed;
   transition: all 0.3s ease-in-out;
 }
 .createNewBtn:hover,
 footer a:hover{
-  color:violet;
-  border-color: #368654;
+  color:rgb(30, 176, 213);
+  border-color: #934c3a;
 }
