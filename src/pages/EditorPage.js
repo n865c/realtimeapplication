@@ -1,8 +1,22 @@
-import React,{useState} from 'react'
+import React,{useState,useRef,useEffect} from 'react'
 import Client from '../components/Client'
 import Editor from '../components/Editor';
+import { initSocket } from "../socket";
+import ACTIONS from "../Actions";
+import { useLocation } from "react-router-dom";
 const EditorPage = () => {
-  const [clients,setClients]=useState([
+  const socketRef = useRef(null);
+  useEffect(() => {
+    const init = async () => {
+      socketRef.current = await initSocket();
+      // socketRef.current.emit(ACTIONS.JOIN, {
+      //   roomId,
+      //   username: location.state?.username,
+      // });
+    };
+    init();
+  }, []);
+  const [clients,setClient]=useState([
     {socketId:1,username:'rakesh k'},
      { socketId:2,username:'nancy k'}
   ])
