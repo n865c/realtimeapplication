@@ -1,25 +1,57 @@
 import React,{useState,useRef,useEffect} from 'react'
 import Client from '../components/Client'
+import toast from 'react-hot-toast';
 import Editor from '../components/Editor';
 import { initSocket } from "../socket";
 import ACTIONS from "../Actions";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation , useNavigate,useParams} from "react-router-dom";
 const EditorPage = () => {
   const socketRef = useRef(null);
+  const location =useLocation();
+  const [clients,setClients]=useState([]
+    // {socketId:1,username:'rakesh k'},
+    //  { socketId:2,username:'nancy k'}
+  );
+  const {roomId}=useParams();
+  const reactNavigator=useNavigate();
   useEffect(() => {
     const init = async () => {
       socketRef.current = await initSocket();
-      // socketRef.current.emit(ACTIONS.JOIN, {
-      //   roomId,
-      //   username: location.state?.username,
-      // });
+      socketRef.current.on('connect_error',(err)=>handleErrors(err));
+      socketRef.current.on('connect_failed',(err)=>handleErrors(err));
+      function handleErrors(e)
+      {
+        console.log('socket error',e);
+        toast.error('Socket connection failed,try again later.');
+        reactNavigator('/');
+      }
+      socketRef.current.emit(ACTIONS.JOIN, {
+        roomId,
+        username:location.state?.username,
+      });
+
+      //Listening for joined event
+      socketRef.current.on(
+        ACTIONS.JOINED,
+        ({
+          clients,username,socketId
+        })=>{
+          if(username!==location.state?.username)
+          {
+            toast.success(`${username} joined the room.`);
+            console.log(`${username} joined`);
+          }
+          setClients(clients);
+        }
+      )
+      
     };
     init();
   }, []);
-  const [clients,setClient]=useState([
-    {socketId:1,username:'rakesh k'},
-     { socketId:2,username:'nancy k'}
-  ])
+  
+  if(!location.state)
+  {return<Navigate to="/"/>
+}
   return (
     <div className="mainWrap">
       <div className='aside'>
