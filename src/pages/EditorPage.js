@@ -8,10 +8,7 @@ import { Navigate, useLocation , useNavigate,useParams} from "react-router-dom";
 const EditorPage = () => {
   const socketRef = useRef(null);
   const location =useLocation();
-  const [clients,setClients]=useState([]
-    // {socketId:1,username:'rakesh k'},
-    //  { socketId:2,username:'nancy k'}
-  );
+  const [clients,setClients]=useState([]);
   const {roomId}=useParams();
   const reactNavigator=useNavigate();
   useEffect(() => {
@@ -44,9 +41,24 @@ const EditorPage = () => {
           setClients(clients);
         }
       )
+      //listening of disconnected
+      socketRef.current.on(ACTIONS.DISCONNECTED,({socketId,username})=>{
+        toast.success(`${username} left the room.`)
+        setClients((prev)=>{
+          return prev.filter(
+            (client)=>client.socketId!==socketId
+            )
+        })
+      })
       
     };
     init();
+    return()=>{
+      socketRef.current?.disconnect();
+      socketRef.current?.off(ACTIONS.JOINED);
+      socketRef.current?.off(ACTIONS.DISCONNECTED);
+    }
+
   }, []);
   
   if(!location.state)
