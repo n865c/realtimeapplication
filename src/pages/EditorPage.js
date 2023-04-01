@@ -47,7 +47,7 @@ const EditorPage = () => {
         setClients((prev)=>{
           return prev.filter(
             (client)=>client.socketId!==socketId
-            )
+           )
         })
       })
       
@@ -89,7 +89,7 @@ const EditorPage = () => {
         <button className='btn leaveBtn'>Leave</button>
         </div>
       <div className='editorWrap'>
-        <Editor/>
+        <Editor scoketRef={socketRef} roomId={roomId}/>
 
       </div>
     </div>
