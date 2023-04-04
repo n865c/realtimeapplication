@@ -17,6 +17,7 @@ const Editor = ({socketRef,roomId}) => {
                 autoCloseBrackets:true,
                 lineNumbers:true,
               })
+             
               editorRef.current.on('change',(instance,changes)=>{
                 console.log('changes',changes)
                 const {origin}=changes;
@@ -28,18 +29,36 @@ const Editor = ({socketRef,roomId}) => {
                   }
                   )
                 }
-                console.log(code);
+                //console.log(code);
               })
               socketRef.current.on(ACTIONS.CODE_CHANGE,({code})=>{
-                 if(code!==null)
-                 {
-                   editorRef.current.setValue(code);
-                 }
-              })
+                console.log("receiving",code);
+
+                if(code!==null)
+                {
+                  editorRef.current.setValue(code);
+                }
+             })
+             
              // editorRef.current.setValue(`console.log('hllo')`);
             }
         init();
-   },[])
+   },[]);
+   useEffect(()=>{
+    console.log('changing ref')
+    if(socketRef.current){
+      socketRef.current.on(ACTIONS.CODE_CHANGE,({code})=>{
+        console.log("receiving",code);
+
+        if(code!==null)
+        {
+          editorRef.current.setValue(code);
+        }
+     })
+    }
+
+
+   },[socketRef.current])
   return <textarea id="realtimeEditor"></textarea>
 }
 
